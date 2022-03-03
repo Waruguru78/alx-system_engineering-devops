@@ -1,2 +1,2 @@
 #!/bin/bash
-chwon vincent:staff *
+chwon -R vincent:staff *
