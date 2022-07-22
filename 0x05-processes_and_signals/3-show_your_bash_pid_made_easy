@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #Bash script to display the  pid
 
-pgrep "bash"
+pgrep -l "bash"
