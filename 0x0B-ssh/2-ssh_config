@@ -1,0 +1,6 @@
+Host 197.237.239.126
+    HostName 197.237.239.126
+     User ubuntu
+     IdentityFile ~/.ssh/school
+     PasswordAuthentication no SHA256
+     
