@@ -2,5 +2,5 @@
 # bash script to install nginx and set up custom headers
 apt-get -y update
 apt-get -y install nginx
-sudo sed -i "29i \\\tadd_header X-Served-By $HOSTNAME;\n" /etc/nginx/nginx.comf
+sudo sed -i "78i \\\tadd_header X-Served-By $HOSTNAME;\n" /etc/nginx/nginx.comf
 service nginx restart
