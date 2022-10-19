@@ -1,65 +1,37 @@
 #!/usr/bin/python3
-# script to gather data from an API
+""" module sends request to an API """
+
 import requests
 import sys
 
 
-def get_username(base_url, user_id):
-    """Gets username
-       Args:
-           base_url (str): base url for API
-           user_id (str): user id number
-       Returns: username
-    """
-    response = requests.get(
-        "{}users/{}".format(base_url, user_id))
-    usr_dict = response.json()
-    return usr_dict['name']
+if __name__ == "__main__":
 
+    employee_id = sys.argv[1]
+    user_response = requests.get(
+            f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+            )
+    todos_response = requests.get(
+            "https://jsonplaceholder.typicode.com/todos/"
+            )
 
-def get_todo_list(base_url, user_id):
-    """Gets todo list
-       Args:
-           base_url (str): base url for API
-           user_id (str): user id number
-       Returns: list of todo items (dicts)
-    """
-    response = requests.get(
-        "{}users/{}/todos".format(base_url, user_id))
-    return response.json()
+    employee_name = user_response.json().get('name')
+    completed_tasks = 0
+    total_tasks = 0
 
+    for task in todos_response.json():
+        if task.get('userId') == int(employee_id):
+            total_tasks += 1
+            if task.get('completed'):
+                completed_tasks += 1
 
-def get_completed(todo_list):
-    """Gets completed items
-       Args:
-           todo_list (list): list of todo items
-       Returns: string of todo items to print
-    """
-
-    done_str = ""
-    done_list = []
-    count = 0
-    for todo in todo_list:
-        if todo['completed'] is True:
-            count += 1
-            done_list.append("\t {}".format(todo['title']))
-    done_str = "\n".join(done_list)
-
-    return count, done_str
-
-
-if __name__ == '__main__':
-    user_id = sys.argv[1]
-    base_url = 'https://jsonplaceholder.typicode.com/'
-
-    uname = get_username(base_url, user_id)
-    todo_list = get_todo_list(base_url, user_id)
-    total = len(todo_list)
-
-    count, done_str = get_completed(todo_list)
-
+    todo_content = '\n'.join(["\t " + task.get('title')
+                              for task in todos_response.json()
+                              if task.get('userId') == int(employee_id)
+                              and task.get('completed')])
     print(
-        "Employee {} is done with tasks({}/{}):".format(uname, count, total))
-    if count > 0:
-        print(done_str)
-        
+            f"Employee {employee_name}",
+            f"is done with ({completed_tasks}/{total_tasks})"
+            )
+    print(todo_content)
+    
